@@ -1,0 +1,5 @@
+// He conservado el archivo de configuración por si más adelante decido
+// utilizarlo, pero en principio no se usa
+{
+	"configText":"texto en config.json"
+}

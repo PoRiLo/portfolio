@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright @ 2019 Esri. All rights reserved under the copyright laws of the United States and applicable international laws, treaties, and conventions. --><snippets><snippet name="bounceFS"><![CDATA[
+#ifdef GL_ES
+precision mediump float;
+#endif
+uniform float ps;uniform vec3 li;uniform vec4 ss;uniform vec4 ie;uniform vec4 lp;uniform vec3 em;uniform float ol;uniform sampler2D is;varying vec4 cc;varying vec3 hh;varying vec3 hd;void main(void){float a=ps*0.01;gl_FragColor.rgb=cc.rgb;gl_FragColor.a=1.0;gl_FragColor=texture2D(is,gl_PointCoord)*gl_FragColor;gl_FragColor.a*=a*0.8;if(gl_FragColor.r<=1e-6&&gl_FragColor.g<=1e-6&&gl_FragColor.b<=1e-6){gl_FragColor.rgb=vec3(0.1,0.1,0.1);gl_FragColor.a*=0.1;}}]]></snippet><snippet name="bounceVS"><![CDATA[attribute vec3 $position;attribute vec2 $auxpos1;uniform mat4 me;uniform mat4 pp;uniform sampler2D so;uniform vec2 ml;uniform float ol;uniform float mo;uniform vec2 lm;uniform sampler2D io;uniform vec3 ls;varying vec4 cc;varying vec3 hh;varying vec3 hd;varying vec3 gg; $linearInterpolator  $lonlat2position  $translationMat  $localTrans  $bounceEaseOut void main(void){float a=fract($auxpos1.y/ml.x);float b=floor($auxpos1.y/ml.y)/ml.y;float c=(texture2D(so,vec2(a,b))).r;float d=getLinearValue(lm,c);float e=mod(mo,ol);float f=getBounceEaseOutValue(e,0.0,c,ol);float g=getLinearValue(lm,f);vec3 h,i;mat4 j=mat4(1.0);
+#ifdef GLOBAL
+mat4 k=getTransMat($position);h=k[3].xyz;j=toRotationMat(k);vec4 l=vec4(0.0,0.0,1.0,0.0);i=(j*l).xyz;
+#else
+h=wgs84ToWebMerc($position);i=vec3(0.0,0.0,1.0);
+#endif
+hh=normalize(i);h+=(i*abs($auxpos1.x)*ls.z*g);if($auxpos1.x<0.0){gl_PointSize=getScope(ls.xy,d);}else{gl_PointSize=getScope(ls.xy,d)*0.4;}gl_Position=me*pp*vec4(h,1.0);hd=h;cc=texture2D(io,vec2(g,0.5));}]]></snippet><snippet name="timeInfoBounceFS"><![CDATA[
+#ifdef GL_ES
+precision mediump float;
+#endif
+uniform float ps;uniform vec3 li;uniform vec4 ss;uniform vec4 ie;uniform vec4 lp;uniform vec3 em;uniform bool drawFlyPath;uniform float ol;uniform sampler2D is;varying vec4 cc;varying vec3 hh;varying vec3 hd;varying vec4 gg; $quintEaseOut void main(void){float a=ps*0.01;gl_FragColor.rgb=cc.rgb;gl_FragColor.a=1.0;if(drawFlyPath){float b=getQuintEaseInOutValue(gg.x,0.0,gg.z-1.0,ol);if(gg.y>b){gl_FragColor.a=0.0;discard;}}else{gl_FragColor=texture2D(is,gl_PointCoord)*gl_FragColor;gl_FragColor.a*=a;}if(gl_FragColor.r<=1e-6&&gl_FragColor.g<=1e-6&&gl_FragColor.b<=1e-6){gl_FragColor.rgb=vec3(0.1,0.1,0.1);}}]]></snippet><snippet name="timeInfoBounceVS"><![CDATA[ $defines attribute vec3 $position;attribute vec2 $auxpos1;uniform mat4 me;uniform mat4 pp;uniform sampler2D so;uniform vec2 ml;uniform float ol;uniform float mo;uniform vec2 lm;uniform sampler2D io;uniform bool drawFlyPath;uniform vec3 ls;uniform float currentIndex;varying vec4 cc;varying vec3 hh;varying vec3 hd;varying vec4 gg; $linearInterpolator  $lonlat2position  $translationMat  $localTrans  $bounceEaseOut void main(void){float a=fract($auxpos1.y/ml.x);float b=floor($auxpos1.y/ml.y)/ml.y;float c=(texture2D(so,vec2(a,b))).r;float d=getLinearValue(lm,c);float e=mod(mo,ol);float f=getBounceEaseOutValue(e,0.0,c,ol);float g=getLinearValue(lm,f);vec3 h,i;if(drawFlyPath){h=$position;hh=normalize(h);}else{mat4 j=mat4(1.0);
+#ifdef GLOBAL
+mat4 k=getTransMat($position);h=k[3].xyz;j=toRotationMat(k);vec4 l=vec4(0.0,0.0,1.0,0.0);i=(j*l).xyz;
+#else
+h=wgs84ToWebMerc($position);i=vec3(0.0,0.0,1.0);
+#endif
+hh=normalize(i);if(currentIndex==$auxpos1.y){h+=(i*abs($auxpos1.x)*ls.z*g);}else{h+=(i*abs($auxpos1.x)*ls.z*d);}if($auxpos1.x<0.0){gl_PointSize=getScope(ls.xy,d);}else{gl_PointSize=getScope(ls.xy,d)*0.4;}}if(drawFlyPath){gg=vec4(e,$auxpos1.x,$auxpos1.y,0.0);}gl_Position=me*pp*vec4(h,1.0);hd=h;cc=texture2D(io,vec2(d,0.5));}]]></snippet></snippets>

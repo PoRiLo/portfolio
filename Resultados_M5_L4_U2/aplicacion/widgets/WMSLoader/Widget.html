@@ -1,0 +1,21 @@
+<div>
+	<label data-dojo-attach-point="wmsLabel">WMS: </label>
+	<br>
+	<div>
+		<input 
+		type = "text" 
+		class = "jimu-input" 
+		data-dojo-type = "dijit/form/TextBox"
+		data-dojo-attach-point = "wmsTextBox"
+		style = "box-sizing: content-box !important;"
+		value = "https://idena.navarra.es/ogc/wms">
+		</input>
+		
+		<input
+		type = "button"
+		class = "jimu-btn"
+		data-dojo-attach-event = "onclick: addWMS"
+		value = "Añadir servidor WMS">
+		</input>
+	</div>
+</div>

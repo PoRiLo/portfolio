@@ -1,0 +1,25 @@
+{
+  "name": "WMSLoader",
+  "label": "WMSLoader",
+  "2D": true,
+  "3D": false,
+  "platform": "HTML",
+  "version": "2.15",
+  "wabVersion": "2.15",
+  "author": "Rubén Dorado",
+  "description": "Widget WMSLoader creado en el ejercicio 2.3 M5 L4 U2 Master GIS Online ESRI",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+    "inPanel": true,
+    "hasLocale": false,
+    "hasStyle": false,
+    "hasConfig": true,
+    "hasUIFile": true,
+    "hasSettingPage": false,
+    "hasSettingUIFile": false,
+    "hasSettingLocale": false,
+    "hasSettingStyle": false,
+    "IsController": false
+  }
+}
