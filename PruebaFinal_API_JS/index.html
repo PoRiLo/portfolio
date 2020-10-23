@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+Prueba final de la lección M5 L3 - API de ArcGIS para JavaScript 
+Creado con la versión 4.14 del API, presciendiendo de Dojo
+Se han introducido modificaciones al código HTML proporcionado
+Alumno: Rubén Dorado Sánchez-Castillo
+-->
+
+<html>
+  <head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!--The viewport meta tag is used to improve the presentation and behavior of the samples on iOS devices-->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>Prueba Final M5 L3 - API JavaScript ArcGIS</title>
+
+    <link rel="stylesheet" 
+      href="https://js.arcgis.com/4.14/esri/themes/light-blue/main.css">
+    <link rel="stylesheet" 
+      href="https://js.arcgis.com/3.31/esri/css/esri.css">
+    <link rel="stylesheet" 
+      href="css/layout.css"/>
+
+    <script src="https://js.arcgis.com/4.14/"></script>
+    <script src="js/PruebaFinal_M5_L3.js"></script>
+
+  </head>
+
+  <body class="claro">
+
+    <header>
+      <p>Master GIS ESRI España</p>
+      <div id="subheader">
+        <p>Prueba final - API de ArcGIS para JavaScript</p>
+        <p>Utilizando la API versión 4.14</p>
+        <hr>
+        <p>Alumno: Rubén Dorado Sánchez-Castillo</p>
+      </div>
+    </header>
+
+    <main id="mainWindow">
+      <aside id="leftPane">
+        <fieldset id="Tareas">
+          Operaciones
+          <hr>
+          <div id=botonDiv>
+            <button id="pintaYQuery" type="button">
+              Seleccionar ciudades
+            </button>
+          </div>
+          <div id="searchDiv"></div>
+        </fieldset>
+        <fieldset id="Leyenda">
+          Leyenda
+          <hr>
+          <div id="legendDiv"></div>
+        </fieldset>
+      </aside>
+      <div id="map"></div>
+    </main>
+
+    <footer>
+      <label for="dtb">
+        Introduzca el nombre de un estado:
+      </label>
+      <input type="text" 
+        id="dtb"
+        value="Vermont">
+      <button id="progButtonNode" type="button">
+        Ir al estado
+      </button>
+    </footer>
+
+  </body>
+</html>

@@ -1,0 +1,87 @@
+/*
+Prueba final de la lección M5 L3 - API de ArcGIS para JavaScript 
+Creado con la versión 4.14 del API, presciendiendo de Dojo
+El presente código CSS ha sido también personalizado
+Alumno: Rubén Dorado Sánchez-Castillo
+*/
+
+html, body { 
+  height: 100%;
+  margin-left: 5px;
+} 
+
+body {
+  background-color: white; 
+  overflow: hidden; 
+  font-family: "Trebuchet MS"; 
+}
+
+header {
+  background-image: url(../images/banner.jpg);
+  background-repeat: repeat-x;
+  display: flex;
+  border: solid 4px #224a54;
+  text-align: left;
+  justify-content: space-around;
+  font-size: 20pt; 
+  font-weight: bold;
+  letter-spacing: .15rem;
+  color: white;
+}
+
+#subheader {
+  font-size: small;
+  line-height: 25%;
+  color: white;
+}
+
+main {
+  display: inline;
+  width: 95%;
+}
+
+#map {
+  float: none;
+  height: 80%;
+  margin-top: 5px;
+  padding: 2px;
+  border: solid 4px #224a54;
+  border-radius: 8px;
+}
+
+aside {
+  float: left;
+  display: block;
+  align-content: space-around;
+  margin-top: 5px;
+  margin-right: 5px;
+  padding: 2px;
+  background-color: white;
+  color: #3f3f3f;
+  border: solid 4px #224a54;
+  height: 80%;
+}
+
+#botonDiv {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#searchDiv {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+footer {
+  display: flex; 
+  height: 40px;
+  width: 100%;
+  margin-top: 5px;
+  padding: 2px;
+  border: solid 2px #224a54;
+  background-color: #ecefe4;
+  color: #3f3f3f;
+  font-size: 10pt;
+  align-items: center;
+  justify-content: center;
+}
