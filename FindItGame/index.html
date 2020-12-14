@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+ArcGIS API for JavaScrip v.4.17
+Find The Country Game, personal project for fun and practice
+created on December 2020
+Author: Rubén Dorado Sánchez-Castillo
+-->
+
+<html>
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!--The viewport meta tag is used to improve the presentation and behavior of the samples on iOS devices-->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>Find the Country - A simple game running on ESRI ArcGIS API for JavaScript</title>
+
+    <link rel="stylesheet" 
+      href="https://js.arcgis.com/4.17/esri/themes/dark/main.css">
+    <link rel="stylesheet" 
+      href="css/layout.css"/>
+
+    <script src="https://js.arcgis.com/4.17/"></script>
+    <script src="js/CountryFinder.js"></script>
+  </head>
+
+  <body>
+    <div id="UI" class="ctrlPanel">
+      <div id="headr">
+        <p>Find the Country</p>
+        <div id="subheader">
+          <p>A little game to refresh your geographic knowledge</p>
+          <p>Built with ArcGIS API for JavaScript ver. 4</p>
+          <hr>
+          <p>Author: Rubén Dorado @Maparama</p>
+        </div>
+      </div>
+      <div id="panelDiv" class="UIelement">
+        <h1>Find the Country</h1>
+        <p>You have 60 seconds to find and click on as many countries as possible.</p>
+        <p>Each correct answer: +5 seconds</p>
+        <p>Each wrong answer: -5 seconds</p>
+        <p>Pass on a country: -20 seconds</p>
+        <div id="startBtnDiv" class="UIelement">
+          <button id="startBtn" type="button">
+            <strong>Start</strong>
+          </button>
+        </div>
+        <div id="questDiv" class="UIelement"> </div>
+        <div id="timerDiv" class="UIelement">Game Over</div>
+        <div id="clickedDiv" class="UIelement"> </div>
+        <div id="passBtnDiv" class="UIelement">
+          <button id="passBtn" type="button">
+            Pass
+          </button>
+        </div>
+        <div id="listDiv" class="UIelement">
+          Countries found so far:
+        </div>
+      </div>
+      <div id="viewDiv"></div>
+    </div>
+  </body>
+</html>

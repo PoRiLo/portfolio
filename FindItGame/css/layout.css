@@ -1,0 +1,74 @@
+/*
+ArcGIS API for JavaScrip v. 4.17
+Find The Country Game, personal project for fun and practice
+created on December 2020
+Author: Rubén Dorado Sánchez-Castillo
+*/
+
+.ctrlPanel {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr 11fr;
+  background-color: black;
+}
+
+.UIelement {
+  font-family: sans-serif;
+  color: cyan;
+  padding: 1rem;
+}
+
+#headr {
+  grid-row: 1;
+  display: flex;
+  border: solid 4px #224a54;
+  text-align: left;
+  justify-content: space-around;
+  font-size: 20pt; 
+  font-weight: bold;
+  letter-spacing: .15rem;
+  color: white;
+  background-image: url(../images/banner.jpg);
+  background-repeat: repeat-x;
+}
+
+#subheader {
+  font-size: small;
+  line-height: 25%;
+  color: white;
+}
+
+#viewDiv {
+  grid-row: 2;
+  height: 100%;
+  width: 100%;
+}
+
+#panelDiv{
+  background-color: rgba(0, 0, 0, .5);
+  width: 50%;
+}
+
+button {
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: large;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: cyan;
+  border: 3px solid;
+  background: none;
+  cursor: pointer;
+}
+
+#questDiv {
+  font-size: large;
+  font-weight: bold;
+}
+
+#timerDiv {
+  font-size: large;
+}
