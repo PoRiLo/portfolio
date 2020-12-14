@@ -52,6 +52,7 @@ function mapBuilder(
     timer = 180.0;
     countries = [];
     btnStart.textContent = "Give up";
+    btnPass.textContent = "Pass";
     divList.textContent = "Countries found so far:"
     mainView.graphics.removeAll();  //clears the graphics layer
     lyrCountries.visible = true;  //makes the countries visible
@@ -93,6 +94,7 @@ function mapBuilder(
     inGame = false;
     timer = 0;
     btnStart.textContent = "Start";
+    btnPass.textContent = "Practice";
     divQuest.textContent = " ";
     divTimer.textContent = "Game Over";
     divClicked.textContent = " ";
@@ -100,8 +102,14 @@ function mapBuilder(
 
   // Pass button: dismisses a country and takes a penalty
   function fPassCountry() {
-    timer -= 20;
-    pickRandomCountry().then(nameRandomCountry); //call to get a random country
+    if (inGame) {
+      timer -= 20;
+      pickRandomCountry().then(nameRandomCountry); //call to get a random country
+    } else {
+      mainView.graphics.removeAll();  //clears the graphics layer
+      divList.textContent = "Countries found so far:"
+      lyrCountries.visible = true;
+    }
   };
 
 
@@ -126,7 +134,7 @@ function mapBuilder(
     // takes the name of the clicked Geometry() and displays it in clickedDiv
     // checks if it's the requested country and acts appropriately
     let clickedCountryName = clickedCountry.attributes.COUNTRY;
-    divClicked.textContent = clickedCountryName;
+    divClicked.textContent = "You clicked on " + clickedCountryName;
     if (inGame) {
       if (countries[countries.length - 1] == clickedCountryName) {
         divList.innerHTML += "<p>" + clickedCountryName + "</p>";
@@ -210,7 +218,7 @@ function mapBuilder(
   
   // mouse event watcher
   mainView.on('click', function (event) {
-    var foundIt = mainView.hitTest(event).then(checkCountry); // if there is a hit, it returns a Graphic() object, else returns undefined
+    mainView.hitTest(event).then(checkCountry); // if there is a hit, it returns a Graphic() object, else returns undefined
   });
 
 };
