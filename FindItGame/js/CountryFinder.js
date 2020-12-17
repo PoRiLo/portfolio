@@ -22,7 +22,7 @@ lyrCountriesURL = 'https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/serv
 // Initializing variables
 var countryList = [];
 var gameList = [];
-var target = [];
+var target = "";
 var timer = 0;
 var inGame = false;
 var interval;
@@ -41,11 +41,11 @@ function mapBuilder(
   var divList = document.getElementById('listDiv');
 
   // button event handlers
-  btnOne.addEventListener('click', fStartGame);
-  btnTwo.addEventListener('click', fPassCountry);
+  btnOne.addEventListener('click', fBtnOne);
+  btnTwo.addEventListener('click', fBtnTwo);
 
   // Button one. Starts the game Sets inGame = true and initiates the timer
-  function fStartGame() {
+  function fBtnOne() {
     if (inGame) {
       timer -= 20;
       target = gameList.shift();
@@ -65,14 +65,22 @@ function mapBuilder(
     }
   };
 
-  // Pass button: dismisses a country and takes a penalty
-  function fPassCountry() {
+  // Button two: dismisses a country and takes a penalty, or ends the game
+  function fBtnTwo() {
     if (inGame) {
       fGameOver();
     } else {
-      mainView.graphics.removeAll();  //clears the graphics layer
-      divList.textContent = "Countries found so far:"
-      lyrCountries.visible = true;
+      if (lyrCountries.visible) {
+        divClicked.textContent = " ";
+        btnTwo.textContent = "Practice";
+        lyrCountries.visible = false;
+      } else {
+        mainView.graphics.removeAll();  //clears the graphics layer
+        divList.textContent = "Countries found so far:"
+        btnTwo.textContent = "Stop";
+        lyrCountries.visible = true;
+      }
+      
     }
   };
 
@@ -117,9 +125,8 @@ function mapBuilder(
   function checkCountry(hitTestResponse) {
     
     // Looks for the clicked country and gets its attributes
-    let clickedCountry = hitTestResponse.results.filter(function(result) {
-      return result.graphic.layer === lyrCountries;
-    })[0].graphic; // captures the graphic
+    let clickedCountry = hitTestResponse.results[0].graphic; // captures the graphic
+    
     clickedCountry.symbol = {
       type: 'simple-fill',  // autocasts as SimpleFillSymbol()
       color: [127, 255, 255, .20],
@@ -226,8 +233,8 @@ function mapBuilder(
   // Later on this list will be shuffled every time the button Start is pressed, that way 
   // we only need to execute the query on this instance
   mainView.whenLayerView(lyrCountries).then(function (layerView) {
-    layerView.watch("updating", function (value) {
-      if (!value) {
+    layerView.watch("updating", function (isupdating) {
+      if (!isupdating) {
         // wait for the layer view to finish updating to query all the features available
         layerView.queryFeatures().then(function (results) {
           results.features.forEach(function (result) {
@@ -239,7 +246,7 @@ function mapBuilder(
       }
     });
   });
-  console.log(countryList);
+  console.log("country list initialized: " + countryList);
 };
 
 
