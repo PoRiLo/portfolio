@@ -33,47 +33,48 @@ function mapBuilder(
 ) {
 
   // assigning variables to HTML elements
-  var btnOne = document.getElementById('Btn1');
-  var btnTwo = document.getElementById('Btn2');
+  var btnStart = document.getElementById('startBtn');
+  var btnPass = document.getElementById('passBtn');
   var divTimer = document.getElementById('timerDiv');
   var divQuest = document.getElementById('questDiv');
   var divClicked = document.getElementById('clickedDiv');
   var divList = document.getElementById('listDiv');
 
   // button event handlers
-  btnOne.addEventListener('click', fStartGame);
-  btnTwo.addEventListener('click', fPassCountry);
+  btnStart.addEventListener('click', fStartGame);
+  btnPass.addEventListener('click', fPassCountry);
 
-  // Button one. Starts the game Sets inGame = true and initiates the timer
+  // Start game button. Sets inGame = true and initiates the timer
   function fStartGame() {
     if (inGame) {
-      timer -= 20;
-      target = gameList.shift();
-      divQuest.textContent = "Find " + target
-    } else {
-      inGame = true;
-      timer = 180.0;
-      gameList = fShuffle(countryList);
-      target = gameList.shift();
-      btnOne.textContent = "Pass";
-      btnTwo.textContent = "Give Up";
-      divList.textContent = "Countries found so far:"
-      divQuest.textContent = "Find " + target
-      mainView.graphics.removeAll();  //clears the graphics layer
-      lyrCountries.visible = true;  //makes the countries visible
-      interval = setInterval(fUpdateTimer, 100);  //starts the timer
+      btnStart.textContent = "Start";
+      fGameOver();
+      return;
     }
+    inGame = true;
+    timer = 180.0;
+    gameList = fShuffle(countryList);
+    target = gameList.shift();
+    btnStart.textContent = "Give up";
+    btnPass.textContent = "Pass";
+    divList.textContent = "Countries found so far:"
+    divQuest.textContent = "Find " + target
+    mainView.graphics.removeAll();  //clears the graphics layer
+    lyrCountries.visible = true;  //makes the countries visible
+    interval = setInterval(fUpdateTimer, 100);  //starts the timer
   };
 
-  // Pass button: dismisses a country and takes a penalty
-  function fPassCountry() {
-    if (inGame) {
-      fGameOver();
-    } else {
-      mainView.graphics.removeAll();  //clears the graphics layer
-      divList.textContent = "Countries found so far:"
-      lyrCountries.visible = true;
+  // Shuffles the an array using the Fisher-Yates algorithm
+  function fShuffle(array) {
+    var m = array.length, t, i;
+    while (m) {
+      i = Math.floor(Math.random() * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
     }
+    console.log("shuffled list: " + array)
+    return array;
   };
 
   // Called by the timer function to update the timer
@@ -85,6 +86,8 @@ function mapBuilder(
     };
   };
 
+  // selects a new target country going through the shuffled list
+
   // Events on Game Over
   function fGameOver() {
     clearInterval(interval);
@@ -92,27 +95,28 @@ function mapBuilder(
     inGame = false;
     timer = 0;
     target = "";
-    btnOne.textContent = "Start";
-    btnTwo.textContent = "Practice";
+    btnStart.textContent = "Start";
+    btnPass.textContent = "Practice";
     divQuest.textContent = " ";
     divTimer.textContent = "Game Over";
     divClicked.textContent = " ";
   };
 
-  // Shuffles an array using the Fisher-Yates algorithm
-  function fShuffle(array) {
-    var m = array.length, t, i;
-    while (m) {
-      i = Math.floor(Math.random() * m--);
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
+  // Pass button: dismisses a country and takes a penalty
+  function fPassCountry() {
+    if (inGame) {
+      timer -= 20;
+      target = gameList.shift();
+      divQuest.textContent = "Find " + target
+    } else {
+      mainView.graphics.removeAll();  //clears the graphics layer
+      divList.textContent = "Countries found so far:"
+      lyrCountries.visible = true;
     }
-    console.log("shuffled list: " + array);
-    return array;
   };
 
-  // On mouse click on a country, captures the graphic geometry, checks whether it is the 
+
+  // On mouse click on a country, captures the graphic geopmetry, checks whether it is the 
   // right country and applies the appropriate actions
   function checkCountry(hitTestResponse) {
     
@@ -140,8 +144,8 @@ function mapBuilder(
         mainView.graphics.add(clickedCountry);
         timer += 5;
         mainView.goTo(clickedCountry);
-        target = gameList.shift();
-        divQuest.textContent = "Find " + target;
+        target = gameList.shift()
+        divQuest.textContent = "Find " + target
       } else {
         timer -= 5;
       }

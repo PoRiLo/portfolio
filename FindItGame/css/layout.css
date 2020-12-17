@@ -46,9 +46,14 @@ Author: Rubén Dorado Sánchez-Castillo
   width: 100%;
 }
 
-#panelDiv{
+#panelDiv {
   background-color: rgba(0, 0, 0, .5);
   width: 50%;
+}
+
+#BtnDiv {
+  display: inline-flex;
+  justify-content: space-around;
 }
 
 button {
@@ -70,9 +75,10 @@ button {
 }
 
 #timerDiv {
-  font-size: large;
+  font-size: x-large;
 }
 
 #listDiv {
-/*  overflow: scroll;*/
+  max-height: 300px;
+  overflow: auto;
 }
