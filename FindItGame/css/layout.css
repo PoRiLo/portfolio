@@ -52,14 +52,15 @@ Author: Rubén Dorado Sánchez-Castillo
 }
 
 #BtnDiv {
-  display: inline-flex;
-  justify-content: space-around;
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
 }
 
 button {
   padding: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   font-size: large;
   font-weight: bold;
   font-family: sans-serif;
@@ -67,6 +68,11 @@ button {
   border: 3px solid;
   background: none;
   cursor: pointer;
+}
+
+#Btn1 {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 #questDiv {
