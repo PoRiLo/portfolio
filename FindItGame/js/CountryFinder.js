@@ -139,7 +139,7 @@ function mapBuilder(
         divList.innerHTML += "<p>" + clickedCountryName + "</p>";
         mainView.graphics.add(clickedCountry);
         timer += 5;
-        mainView.goTo(clickedCountry);
+        mainView.goTo(clickedCountry); // takes the camera focus to the country
         target = gameList.shift();
         divQuest.textContent = "Find " + target;
       } else {
