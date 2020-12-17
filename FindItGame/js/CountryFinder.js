@@ -229,14 +229,9 @@ function mapBuilder(
     layerView.watch("updating", function (value) {
       if (!value) {
         // wait for the layer view to finish updating to query all the features available
-        layerView.queryFeatures({
-          outFields: ["COUNTRY"],
-          orderByFields: ["FID"]
-        }).then(function (results) {
-          graphics = results.features;
-          graphics.forEach(function (result, index) {
-            let name = result.attributes.COUNTRY;
-            countryList.push(name);
+        layerView.queryFeatures().then(function (results) {
+          results.features.forEach(function (result) {
+            countryList.push(result.attributes.COUNTRY);
           });
         }).catch(function (error) {
           console.error("query failed: ", error);
