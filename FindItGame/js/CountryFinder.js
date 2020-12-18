@@ -11,7 +11,6 @@ const modules = [
   'esri/views/SceneView',
   'esri/Camera',
   'esri/layers/FeatureLayer',
-  'esri/tasks/support/Query',
   'esri/widgets/Fullscreen',
   'esri/widgets/Home'
 ];
@@ -29,7 +28,7 @@ var interval;
 
 // Builder function, called from _require_
 function mapBuilder(
-  Map, SceneView, Camera, FeatureLayer, Query, Fullscreen, Home
+  Map, SceneView, Camera, FeatureLayer, Fullscreen, Home
 ) {
 
   // assigning variables to HTML elements
@@ -44,28 +43,35 @@ function mapBuilder(
   btnOne.addEventListener('click', fBtnOne);
   btnTwo.addEventListener('click', fBtnTwo);
 
-  // Button one. Starts the game Sets inGame = true and initiates the timer
+  // Button one: If not inGame => sets inGame = true and creates a timer
+  // If inGame => applies a penalty and chooses a new country
   function fBtnOne() {
     if (inGame) {
       timer -= 20;
+      let missedCountry = target;
+      fFindCountry(missedCountry);
       target = gameList.shift();
       divQuest.textContent = "Find " + target
     } else {
       inGame = true;
       timer = 180.0;
-      gameList = fShuffle(countryList);
-      target = gameList.shift();
       btnOne.textContent = "Pass";
       btnTwo.textContent = "Give Up";
       divList.textContent = "Countries found so far:"
       divQuest.textContent = "Find " + target
       mainView.graphics.removeAll();  //clears the graphics layer
-      lyrCountries.visible = true;  //makes the countries visible
+      lyrCountries.visible = true;
+      gameList = countryList.slice();
+      fShuffle(gameList);
+      console.log(gameList);
+      target = gameList.shift();
+      divQuest.textContent = "Find " + target;
       interval = setInterval(fUpdateTimer, 100);  //starts the timer
     }
-  };
+  }
 
-  // Button two: dismisses a country and takes a penalty, or ends the game
+  // Button two: If inGame => ends the game 
+  // If not InGame => initiates/stops practice mode
   function fBtnTwo() {
     if (inGame) {
       fGameOver();
@@ -76,22 +82,26 @@ function mapBuilder(
         lyrCountries.visible = false;
       } else {
         mainView.graphics.removeAll();  //clears the graphics layer
-        divList.textContent = "Countries found so far:"
+        divList.textContent = ""
         btnTwo.textContent = "Stop";
         lyrCountries.visible = true;
+        gameList = countryList.slice();
+        fShuffle(gameList);
+        console.log(gameList);
+        target = gameList.shift();
+        divQuest.textContent = "Find " + target;
       }
-      
     }
-  };
+  }
 
-  // Called by the timer function to update the timer
+  // Called by setInterval, updates the timer
   function fUpdateTimer() {
     timer -= .1;
     divTimer.textContent = "Time left: " + Math.round(timer);
     if (timer <= 0) {
       fGameOver();
     };
-  };
+  }
 
   // Events on Game Over
   function fGameOver() {
@@ -105,20 +115,19 @@ function mapBuilder(
     divQuest.textContent = " ";
     divTimer.textContent = "Game Over";
     divClicked.textContent = " ";
-  };
+  }
 
   // Shuffles an array using the Fisher-Yates algorithm
   function fShuffle(array) {
-    var m = array.length, t, i;
+    let m = array.length, t, i;
     while (m) {
       i = Math.floor(Math.random() * m--);
       t = array[m];
       array[m] = array[i];
       array[i] = t;
     }
-    console.log("shuffled list: " + array);
     return array;
-  };
+  }
 
   // On mouse click on a country, captures the graphic geometry, checks whether it is the 
   // right country and applies the appropriate actions
@@ -141,19 +150,46 @@ function mapBuilder(
     // checks if it's the requested country and acts appropriately
     let clickedCountryName = clickedCountry.attributes.COUNTRY;
     divClicked.textContent = "You clicked on " + clickedCountryName;
-    if (inGame) {
-      if (clickedCountryName == target) {
+    if (clickedCountryName == target) {
+      mainView.graphics.add(clickedCountry);
+      target = gameList.shift();
+      divQuest.textContent = "Find " + target;
+      if (inGame) {
         divList.innerHTML += "<p>" + clickedCountryName + "</p>";
-        mainView.graphics.add(clickedCountry);
         timer += 5;
-        mainView.goTo(clickedCountry); // takes the camera focus to the country
-        target = gameList.shift();
-        divQuest.textContent = "Find " + target;
       } else {
         timer -= 5;
       }
     }
-  };
+  }
+
+  // This function is called when the player pass on a country. It queries the view
+  // for the country, takes the focus to the country and draws it in red.
+  function fFindCountry(missedCountry) {
+    let missGeom;
+    let passSymbol = {
+      type: 'simple-fill',
+      color: [255, 80, 80, .20],
+      style: 'solid',
+      outline: {
+        color: [255, 0, 0, 1],
+        width: 2
+      }
+    };
+
+    let query = lyrCountries.createQuery() 
+    query.returnGeometry = true;
+    query.where = "COUNTRY = '" + missedCountry + "'";
+
+    lyrCountries.queryFeatures(query).then(function (results) {
+      missGeom = results.features;
+      missGeom.symbol = passSymbol;
+      mainView.graphics.add(results.features);
+      mainView.goTo(missGeom); // takes the camera focus to the country
+    }).catch(function (error) {
+      console.error("queryFeatures error: ", error);
+    });
+  }
 
 
   /*
@@ -162,8 +198,8 @@ function mapBuilder(
   // creating the Feature Layer object
   const lyrCountries = new FeatureLayer({
     url: lyrCountriesURL,
-    outFields: ["COUNTRY"],
-    visible: true,
+    outFields: ["*"],
+    visible: false,
     renderer: {
       type: 'simple',  // autocasts as new SimpleRenderer()
       symbol: {
@@ -224,31 +260,22 @@ function mapBuilder(
     }
   ]);
   
-  // mouse event watcher
-  mainView.on('click', function (event) {
-    mainView.hitTest(event).then(checkCountry); // if there is a hit, it returns a Graphic() object, else returns undefined
-  });
-
-  // popupating the list of countries in startup by querying the feature layer view. 
-  // Later on this list will be shuffled every time the button Start is pressed, that way 
-  // we only need to execute the query on this instance
-  mainView.whenLayerView(lyrCountries).then(function (layerView) {
-    layerView.watch("updating", function (isupdating) {
-      if (!isupdating) {
-        // wait for the layer view to finish updating to query all the features available
-        layerView.queryFeatures().then(function (results) {
-          results.features.forEach(function (result) {
-            countryList.push(result.attributes.COUNTRY);
-          });
-        }).catch(function (error) {
-          console.error("query failed: ", error);
-        });
-      }
+  // creating the list of countries
+  lyrCountries.queryFeatures().then(function (results) {
+    results.features.forEach(function (result) {
+      countryList.push(result.attributes.COUNTRY);
     });
   });
-  console.log("country list initialized: " + countryList);
-};
 
+  // mouse event watcher, the hitTest returns a Graphic() object, else returns undefined
+  mainView.on('click', function (event) {
+    mainView.hitTest(event).then(
+      checkCountry
+    ).catch(function (error) {
+          console.error("hitTest failed: possibly clicked out of a country. Can be ignored");
+    });
+  });
+}
 
 /*
 Call to function _require_ to build the scene

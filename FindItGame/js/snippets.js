@@ -8,9 +8,7 @@
   // choosing a random country from the Feature Layer
   function pickRandomCountry() {
     let randomFID = Math.floor(Math.random()*249); // there are 249 countries in the Feature Layer
-    let query = lyrCountries.createQuery();
-    query.where = 'FID = ' + randomFID;
-    query.outFields = ["COUNTRY"];
+    
     
     return lyrCountries.queryFeatures(query);
   };
@@ -43,3 +41,28 @@
     });
     mainView.goTo(cam);
   };
+
+// adds a new found country to the list. 4 lines to avoid innerHTML?
+let newBlock = document.createElement("p"); 
+let newFound = document.createTextNode(clickedCountryName);
+newBlock.appendChild(newFound);
+divList.appendChild(newBlock);
+
+
+  // popupating the list of countries in startup by querying the feature layer view. 
+  // Later on this list will be shuffled every time the button Start is pressed, that way 
+  // we only need to execute the query on this instance
+  mainView.whenLayerView(lyrCountries).then(function (layerView) {
+    let watcher = layerView.watch("updating", function (isupdating) {
+      if (!isupdating) { // wait for the layer view to finish updating
+        layerView.queryFeatures().then(function (results) {
+          results.features.forEach(function (result) {
+            countryList.push(result.attributes.COUNTRY);
+          });
+          watcher.remove();
+        }).catch(function (error) {
+          console.error("initial list build failed: ", error);
+        });
+      }
+    });
+  });
