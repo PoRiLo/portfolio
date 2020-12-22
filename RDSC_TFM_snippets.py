@@ -178,44 +178,6 @@ def PopulateProcesionaria(jaar, plaagdruk):
         return 0
 
 """
-Snippet para la introducción de valores aleatorios del campo 'Tratamientos' en la capa Procesionaria
-En el campo Expression de la herramienta CalculateField se introduce la llamada a la función. El siguiente código se introduce en el Code Block
-"""
-
-# Expression
-
-PopulateProcesionaria(!jaar!, !plaagdruk!)
-
-# Code block
-
-from random import betavariate
-
-def PopulateProcesionaria(jaar, plaagdruk):
-
-    alfa = .25
-    beta = 1
-    aleatorio = betavariate(alfa, beta)
-
-    if jaar == 2019:
-        if plaagdruk == 'Hoog':
-            if aleatorio < .65:
-                return 1
-            else:
-                return 2
-        elif plaagdruk == 'Matig':
-            if aleatorio < .35:
-                return 0
-            elif aleatorio < .8:
-                return 1
-            else:
-                return 2
-        else:
-            return 0
-    else:
-        return 0
-
-
-"""
 Snippet para la introducción de valores aleatorios del campo 'Mantemiento' en la capa Areas_caninas
 En el campo Expression de la herramienta CalculateField se introduce la llamada a la función. El siguiente código se introduce en el Code Block
 """
